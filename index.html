@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Projets soumis</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background-color: #f4f4f4; }
+  </style>
+</head>
+<body>
+  <h1>Liste des projets</h1>
+  <table id="responsesTable">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadResponses() {
+      const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRipujViDZk6VDsKgrFTHW-sgjTpC8bavkM0rFoyKLEbdrMAVPHAAJHlIIWDV26ddEOpx6aA9cuR-l-/pub?output=csv";
+      const response = await fetch(url);
+      const data = await response.text();
+      const rows = data.split("\n").map(r => r.split(","));
+
+      // Remplir l’entête
+      const thead = document.querySelector("#responsesTable thead");
+      thead.innerHTML = "<tr>" + rows[0].map(h => `<th>${h}</th>`).join("") + "</tr>";
+
+      // Remplir le corps
+      const tbody = document.querySelector("#responsesTable tbody");
+      tbody.innerHTML = rows.slice(1).map(r =>
+        "<tr>" + r.map(c => `<td>${c}</td>`).join("") + "</tr>"
+      ).join("");
+    }
+
+    loadResponses();
+  </script>
+</body>
+</html>
